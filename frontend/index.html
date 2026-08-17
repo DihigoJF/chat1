@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+<title>Chat Privado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============================================================ -->
+  <!-- PANTALLA 1: ACCESO — nombre + sala, antes de entrar al chat  -->
+  <!-- ============================================================ -->
+  <section id="screen-login" class="screen" aria-live="polite">
+    <div class="login-card">
+      <div class="login-signal" aria-hidden="true">
+        <span class="signal-dot signal-dot--a"></span>
+        <span class="signal-line"></span>
+        <span class="signal-dot signal-dot--b"></span>
+      </div>
+
+      <h1 class="login-title">Chat privado</h1>
+      <p class="login-subtitle">Una conversación. Dos personas. Nada queda guardado.</p>
+
+      <form id="form-login" novalidate>
+        <label class="field-label" for="input-name">Tu nombre</label>
+        <input
+          id="input-name"
+          class="field-input"
+          type="text"
+          placeholder="Introduce tu nombre"
+          maxlength="24"
+          autocomplete="off"
+          required
+        >
+
+        <details class="login-advanced">
+          <summary>Opciones avanzadas</summary>
+          <label class="field-label" for="input-room">Código de sala (opcional)</label>
+          <input
+            id="input-room"
+            class="field-input"
+            type="text"
+            placeholder="Déjalo vacío para usar la sala por defecto"
+            maxlength="64"
+            autocomplete="off"
+          >
+          <p class="field-hint">Comparte el mismo código con la otra persona para aseguraros de encontraros en la misma sala.</p>
+        </details>
+
+        <p id="login-error" class="login-error" role="alert" hidden></p>
+
+        <button type="submit" class="btn-primary">Entrar al chat</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- PANTALLA 2: CHAT                                              -->
+  <!-- ============================================================ -->
+  <section id="screen-chat" class="screen screen--chat" hidden>
+
+    <header class="chat-header">
+      <div class="chat-header__identity">
+        <span class="app-name">Chat privado</span>
+        <div class="peer-status">
+          <span id="presence-orb" class="presence-orb" data-state="connecting" aria-hidden="true"></span>
+          <span id="peer-status-text" class="peer-status-text">Conectando…</span>
+        </div>
+      </div>
+      <div class="chat-header__meta">
+        <span id="message-counter" class="message-counter" title="Mensajes en esta sesión">0</span>
+      </div>
+    </header>
+
+    <div id="banner-area" class="banner-area" aria-live="polite"></div>
+
+    <main id="message-list" class="message-list" aria-live="polite"></main>
+
+    <div id="typing-indicator" class="typing-indicator" hidden>
+      <span id="typing-text"></span>
+      <span class="typing-dots"><i></i><i></i><i></i></span>
+    </div>
+
+    <form id="form-message" class="composer" autocomplete="off">
+      <textarea
+        id="input-message"
+        class="composer__input"
+        placeholder="Escribe un mensaje…"
+        maxlength="2000"
+        rows="1"
+        disabled
+      ></textarea>
+      <button type="submit" id="btn-send" class="composer__send" disabled aria-label="Enviar mensaje">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
+          <path d="M4 12L20 4L13 20L11 13L4 12Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </form>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>

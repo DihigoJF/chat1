@@ -1,0 +1,15 @@
+{
+  "name": "chat-privado-signaling",
+  "version": "1.0.0",
+  "description": "Servidor mínimo de signaling (sin base de datos, sin almacenamiento de mensajes) para establecer conexiones WebRTC entre exactamente 2 usuarios.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

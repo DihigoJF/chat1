@@ -30,7 +30,7 @@ const CONFIG = {
     }
     // ⚠️ Reemplaza esta línea por la URL real de tu servidor de signaling
     // publicado, por ejemplo: 'wss://mi-chat-signaling.onrender.com'
-    return 'wss://chat-763y.netlify.app/frontend/';
+    return 'wss://chat-signaling.onrender.com';
   })(),
 
   // Servidores STUN públicos, necesarios para que WebRTC descubra cómo

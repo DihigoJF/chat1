@@ -5,8 +5,8 @@ const Connection = (() => {
 
     function init() {
         if (!socket) {
-            // AQUÍ: reemplaza con la URL de tu servidor en Render
-            const SERVER_URL = 'https://tu-chat.onrender.com'; // ← Cambia esto
+            // ⚠️ REEMPLAZA con la URL de tu backend en Render (sin barra al final)
+            const SERVER_URL = 'https://mi-chat.onrender.com'; // <-- CAMBIA ESTO
             socket = io(SERVER_URL, {
                 reconnectionAttempts: 5,
                 timeout: 10000,

@@ -1,11 +1,9 @@
-// Módulo de chat: maneja la interfaz y eventos de chat
 const Chat = (() => {
     let currentUser = '';
     let messages = [];
     let isTyping = false;
     let typingTimeout = null;
 
-    // Elementos DOM
     const loginScreen = document.getElementById('login-screen');
     const chatScreen = document.getElementById('chat-screen');
     const nameInput = document.getElementById('name-input');
@@ -21,17 +19,12 @@ const Chat = (() => {
 
     const socket = Connection.getSocket();
 
-    // Inicializar eventos
     function init() {
-        // Eventos de Socket.IO
         socket.on('join-success', (data) => {
             currentUser = data.name;
             showChatScreen();
-            // Guardar nombre en sessionStorage
             sessionStorage.setItem('chatUsername', currentUser);
-            // Marcar como conectado
             setStatus('online', 'Conectado');
-            // Enfocar input
             messageInput.focus();
         });
 
@@ -48,11 +41,6 @@ const Chat = (() => {
             messages.push(message);
             renderMessages();
             scrollToBottom();
-            // Notificación visual opcional
-            if (message.name !== currentUser) {
-                // Sonido opcional si se desea
-                // playSound();
-            }
         });
 
         socket.on('user-list', (users) => {
@@ -60,16 +48,12 @@ const Chat = (() => {
         });
 
         socket.on('user-disconnected', (name) => {
-            // No es necesario porque user-list ya se actualiza, pero podemos mostrar un mensaje
+            // La lista de usuarios ya se actualiza con user-list
         });
 
         socket.on('typing-indicator', (data) => {
             if (data.name !== currentUser) {
-                if (data.isTyping) {
-                    typingIndicator.textContent = `${data.name} está escribiendo...`;
-                } else {
-                    typingIndicator.textContent = '';
-                }
+                typingIndicator.textContent = data.isTyping ? `${data.name} está escribiendo...` : '';
             }
         });
 
@@ -79,14 +63,12 @@ const Chat = (() => {
 
         socket.on('connect', () => {
             setStatus('online', 'Conectado');
-            // Si ya teníamos un nombre, intentar reingresar
             const storedName = sessionStorage.getItem('chatUsername');
             if (storedName) {
                 socket.emit('join', storedName);
             }
         });
 
-        // Eventos UI
         joinBtn.addEventListener('click', handleJoin);
         nameInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') handleJoin();
@@ -98,22 +80,17 @@ const Chat = (() => {
 
         leaveBtn.addEventListener('click', handleLeave);
 
-        // Recuperar nombre si existe en sessionStorage
         const stored = sessionStorage.getItem('chatUsername');
         if (stored) {
             nameInput.value = stored;
-            // Auto-unirse al cargar si ya estaba en sesión? mejor manual.
         }
 
-        // Si el socket ya está conectado, mostrar estado
         if (Connection.isConnected()) {
             setStatus('online', 'Conectado');
         }
 
-        // Eventos de conexión personalizados (disparados desde connection.js)
         document.addEventListener('socket-connected', () => {
             setStatus('online', 'Conectado');
-            // Reintentar unirse si hay nombre almacenado
             const storedName = sessionStorage.getItem('chatUsername');
             if (storedName && !currentUser) {
                 socket.emit('join', storedName);
@@ -139,21 +116,17 @@ const Chat = (() => {
             loginError.textContent = 'El nombre no puede tener más de 20 caracteres.';
             return;
         }
-        // Validar caracteres (solo letras, números y espacios)
         if (!/^[a-zA-Z0-9\s]+$/.test(name)) {
             loginError.textContent = 'El nombre solo puede contener letras, números y espacios.';
             return;
         }
-
         loginError.textContent = '';
-        // Emitir join al servidor
         socket.emit('join', name);
     }
 
     function showChatScreen() {
         loginScreen.style.display = 'none';
         chatScreen.style.display = 'flex';
-        // Enfocar input de mensaje
         setTimeout(() => messageInput.focus(), 100);
     }
 
@@ -209,9 +182,8 @@ const Chat = (() => {
             nameSpan.className = 'name';
             nameSpan.textContent = name;
             const dot = document.createElement('span');
-            dot.className = `status-dot ${name === currentUser ? 'online' : 'online'}`; // todos los conectados están online
+            dot.className = 'status-dot online';
             if (name === currentUser) {
-                // resaltar propio
                 nameSpan.style.fontWeight = 'bold';
             }
             item.appendChild(avatar);
@@ -242,11 +214,9 @@ const Chat = (() => {
             alert('El mensaje no puede superar los 500 caracteres.');
             return;
         }
-        // Enviar
         socket.emit('chat-message', { text });
         messageInput.value = '';
         messageInput.style.height = 'auto';
-        // Dejar de escribir
         clearTypingTimeout();
         socket.emit('typing', false);
         messageInput.focus();
@@ -269,11 +239,9 @@ const Chat = (() => {
             socket.emit('typing', false);
             isTyping = false;
         }
-        // Autoajuste de altura
         messageInput.style.height = 'auto';
         messageInput.style.height = Math.min(messageInput.scrollHeight, 120) + 'px';
 
-        // Reiniciar timeout para dejar de escribir
         clearTypingTimeout();
         typingTimeout = setTimeout(() => {
             if (isTyping) {
@@ -292,11 +260,8 @@ const Chat = (() => {
 
     function handleLeave() {
         if (confirm('¿Estás seguro de que quieres abandonar el chat?')) {
-            // Desconectar socket y recargar o volver al login
             socket.disconnect();
-            // Limpiar sesión
             sessionStorage.removeItem('chatUsername');
-            // Recargar página para volver al login
             location.reload();
         }
     }
@@ -305,10 +270,5 @@ const Chat = (() => {
         messagesArea.scrollTop = messagesArea.scrollHeight;
     }
 
-    // Inicializar
     init();
-
-    return {
-        // Exponer si es necesario
-    };
 })();

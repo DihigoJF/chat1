@@ -6,7 +6,7 @@ const Connection = (() => {
     function init() {
         if (!socket) {
             // AQUÍ: reemplaza con la URL de tu servidor en Render
-            const SERVER_URL = 'https://chat-763y.netlify.app/public/'; // ← Cambia esto
+            const SERVER_URL = 'https://chat-763y.netlify.app/'; // ← Cambia esto
             socket = io(SERVER_URL, {
                 reconnectionAttempts: 5,
                 timeout: 10000,
